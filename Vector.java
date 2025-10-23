@@ -278,7 +278,7 @@ class Entero {
             for(int j=i+1;j<longitud;j++){
                 if(v.get(i)>v.get(j)){ //cambiar signo
                     intercambiar(i,j);
-                   System.out.println(descargar()) ;
+                   //System.out.println(descargar()) ;
                 }
                 
             }
@@ -297,20 +297,208 @@ class Entero {
         }
     }
     
+    boolean verifVectorOrdenadoAscRango(int a,int b){
+
+        for(int i=a;i<b;i++){
+            if(v.get(i)>v.get(i+1)){
+                System.out.println("i= "+i);
+               return false;
+            }
+        }
+        return true;
+    }
+    
+    void separPrimoNoPrimo(Vector vp,Vector vnp){
+        Entero nro=new Entero();
+        for(int i=0;i<longitud;i++){
+            nro.cargar(v.get(i));
+            if(nro.esPrimo())
+                vp.agregarFinal(v.get(i));
+             else
+                vnp.agregarFinal(v.get(i));
+        
+        }
+    }
+    
+    int mayorPosMul(int m){
+        int i=0;
+        int mayor=v.get(0);
+        while(i<longitud){
+            if(v.get(i)>mayor){
+                mayor=v.get(i);
+            }
+            i+=m;
+        }
+        return mayor;
+    }
+    
+        int promedioPosMultiplos(int m){
+            int i=0;
+            int s=0;
+            int c=0;
+            while(i<longitud){
+                s+=v.get(i);
+                c++;
+                i=i+m;
+            }
+            return (s/c);
+    }
+    
+    int cantEleDiferentes(){
+        int i=0,ele=0,c=0;
+        ordenarAsc();
+        while(i<longitud){
+            ele=v.get(i);
+           while(i<longitud &&
+                  ele==v.get(i)){
+            i++;
+           }
+           c++;
+        }
+        return c;
+    }
+    
+    //rangos => todas mis demas funciones o
+    //procedimientos tambien tienen que 
+    //trabajar en rangos!!!!!!
+    int cantEleDiferentesRango(int a, int b){
+        int i=a,ele=0,c=0;
+        ordenarAscRango(a,b);
+        while(i<=b){
+            ele=v.get(i);
+            while(i<=b &&
+                  ele==v.get(i)){
+            i++;
+           }
+           c++;
+        }
+        return c;
+    }
+    
+    int frecuencia(int ele){
+        int c=0;
+        for(int i=0;i<longitud;i++) 
+          if(ele==v.get(i)) 
+            c++;
+        return c;
+    }
+    
+     int frecuencia(int ele,int a, int b){
+        int c=0;
+        for(int i=a;i<=b;i++) 
+          if(ele==v.get(i)) 
+            c++;
+        return c;
+    }
+    
+    //elemento menos repetido
+    int eleMenosRepetido(){
+        int ele=v.get(0);
+        int cant=frecuencia(ele) ;
+        int frec;
+        for(int i=1; i<longitud;i++){
+            frec=frecuencia(v.get(i));
+            if(frec<cant){
+                ele=v.get(i);
+                cant=frec;
+            }
+        }
+        return ele;
+    }
+    
+    int eleMenosRepetidoRango(int a ,int b){
+        int ele=v.get(a);
+        int cant=frecuencia(ele,a,b) ;
+        int frec;
+        for(int i=a; i<=b;i++){
+            frec=frecuencia(v.get(i),a,b);
+            if(frec<cant){
+                ele=v.get(i);
+                cant=frec;
+            }
+        }
+        return ele;
+    }
+    
+    
+    // frecuencia de distribucion
+    void frecuenciaDeDistribucion(Vector ve,Vector vf){
+        int i=0,ele=0,c=0;
+        ordenarAsc();
+        while(i<longitud){
+           ele=v.get(i); c=0;
+           while(i<longitud &&
+                  ele==v.get(i)){
+            i++;
+            c++;
+           }
+           ve.agregarFinal(ele);
+           vf.agregarFinal(c);
+        }
+    }
+    
+    
+    // frecuencia de distribucion con rango
+    void frecuenciaDeDistribucion(Vector vri,Vector vrf, Vector vf,int rango){
+        int i=0,c=0;
+        int ri=0,rf;
+        ordenarAsc();
+        while(i<longitud){
+           c=0;
+           ri=(v.get(i)/rango)*rango;
+           rf=ri+rango-1;
+           while(i<longitud &&
+                  (v.get(i)>=ri)&&
+                  (v.get(i)<=rf)){
+            i++;
+            c++;
+           }
+           vri.agregarFinal(ri);
+           vrf.agregarFinal(rf);
+           vf.agregarFinal(c);
+        }
+    }
+    
+    
+    
 }
 
 class Main {
     public static void main(String[] args) {
 
         Vector v=new Vector();//instanciar = new Vector()
+        
+        Vector vp=new Vector();
+        Vector vnp=new Vector();
+        Vector ve=new Vector();
+        Vector vf=new Vector();
+        
+         Vector vri=new Vector();
+        Vector vrf=new Vector();
        // v.cargar(10);
-        v.cargarManual(6);
+        v.cargarManual(12);
         //v.serieF(16);
         System.out.println( v.descargar());
+        v.frecuenciaDeDistribucion(vri,vrf,vf,10);
+         System.out.println( v.descargar());
+         System.out.println( vri.descargar());
+          System.out.println( vrf.descargar());
+           System.out.println( vf.descargar());
+        //v.frecuenciaDeDistribucion(ve,vf);
+       //  System.out.println( ve.descargar());
+        //  System.out.println( vf.descargar());
+       // System.out.println( "Ele menos repetido = "+v.eleMenosRepetido());
+        //System.out.println( "Cantidad Ele Dif = "+v.cantEleDiferentes());
+        // System.out.println( "Mayor = "+v.mayorPosMul(3));
+         // System.out.println( "Promedio = "+v.promedioPosMultiplos(3));
+       // v.separPrimoNoPrimo(vp,vnp);
+         //System.out.println( vp.descargar());
+         //System.out.println( vnp.descargar());
         //v.eliminarElemRango(2,6);
         //v.ordenarAsc();
-        v.ordenarAscRango(2,4);
-         System.out.println( v.descargar());
+        //v.ordenarAscRango(2,4);
+        //System.out.println( v.verifVectorOrdenadoAscRango(3,5));
+        // System.out.println( v.descargar());
         //System.out.println( v.descargarPosicionesImpares());
         //System.out.println( v.descargarPosicionesPares());
          //System.out.println( v.descargarRango(2,6));
