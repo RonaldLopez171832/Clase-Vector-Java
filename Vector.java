@@ -13,14 +13,23 @@ class Entero {
         n=nro;
     }
     
+    boolean esBase(int base){
+      int d=0; int na=n;
+      while(na>0){
+          d=na%10;
+          na=na/10;
+          if(d>=base){
+              return false;
+          }
+      }
+      return true;
+    }
+    
+    
     
     boolean esPrimo(){
         int c=0;
-        for(int i=1; i<=n;i++){
-            if(n%i==0){
-                c++;
-            }
-        }
+        for(int i=1; i<=n;i++)if(n%i==0) c++;
         return (c==2);
        /* if(c==2){
             return true;
@@ -29,6 +38,7 @@ class Entero {
         }*/
     }
     
+   
 }
 
 
@@ -458,17 +468,117 @@ class Entero {
            vf.agregarFinal(c);
         }
     }
+    int longitudVector(){
+        return longitud;
+    }
     
+    //v{0,1,2,3,4,5,6,7}. v2{10,20,30,40} p=2
+    //1er paso
+    //v{0,1,2,3,4,5,6,7,0,0,0,0}
+    //2do paso
+    //v{0,1,0,0,0,0,3,4,5,6,7}
+    //3er paso
+    //v{0,1,10,20,30,40,2,3,4,5,6,7}
+     int get(int pos){
+         return v.get(pos);
+     }
+    void insertarVectorEnPosicion(Vector v2, int p){
+       //1er paso
+        for(int i=0;i<v2.longitudVector();i++){
+            v.add(0);
+        }
+        longitud = longitud+v2.longitudVector();
+        int j=0;
+        //2 paso
+        for(int i=((longitud-v2.longitudVector())-1); i>=p;i--){
+           //  System.out.println(v);
+             System.out.println(i+"  "+(longitud-1-j));
+            intercambiar(i,longitud-1-j);
+            
+            j++;
+        }
+        //3er paso
+        for(int i=0;i<v2.longitudVector();i++){
+            v.set(p,v2.get(i));
+            p++;
+        }
+
+    }
+    //V = {10,110,1011,1111,101}, b = 2 → TRUE
+    
+    // v= {1,2,4,5,6,7}
+    //v={1,10,100,101,011,111}
+    
+    boolean ejercicio21(int base){
+        Entero nro=new Entero();
+        for(int i=0;i<longitud;i++){
+            nro.cargar(v.get(i));
+            //v.set(i,nro.decABinario(v.get(i)));
+            if(!nro.esBase(base)){
+               return false; 
+            }
+        }
+        return true;
+    }
+    
+    //Intercalar dos vectores en un tercero
+    //V = {1,3,5,7,9}, V2 = {2,4,6,8,10,12,14,16} v3={}
+     //Resultado → v3{1,2,3,4,5,6,7,8,9,10,12,14,16}
+     void ejercicio18(Vector v2,Vector v3){
+         int iv=0,iv2=0;
+         while(iv<longitud || iv2<v2.longitudVector() ){
+             if(iv<longitud){
+                v3.agregarFinal(v.get(iv));
+                iv++;
+             }
+             if(iv2<v2.longitudVector()){
+                 v3.agregarFinal(v2.get(iv2));
+                 iv2++;
+             }
+         }
+    }
     
     
 }
 
 class Main {
     public static void main(String[] args) {
-
+       //ejercicio 18
         Vector v=new Vector();//instanciar = new Vector()
+         Vector v2=new Vector();
+         Vector v3=new Vector();
+        v.cargarManual(5);
+        v2.cargarManual(3);
+        System.out.println( v.descargar());
+        System.out.println( v2.descargar());
+         System.out.println( v3.descargar());
+         v.ejercicio18(v2,v3);
+         System.out.println( v3.descargar());
         
-        Vector vp=new Vector();
+       
+       
+       
+       //ejercicio 8
+       /* Vector v=new Vector();//instanciar = new Vector()
+        Vector v2=new Vector();
+         v.cargarManual(7);
+         v2.cargarManual(4);
+         System.out.println( v.descargar());
+         System.out.println( v2.descargar());
+         v.insertarVectorEnPosicion(v2,2);
+         System.out.println( v.descargar());*/
+        
+        
+      /*  Vector v=new Vector();//instanciar = new Vector()
+        v.cargarManual(4);
+        System.out.println( v.descargar());
+        System.out.println(v.ejercicio21(2));
+        */
+        
+        
+        
+        
+       /* Vector vp=new Vector();
         Vector vnp=new Vector();
         Vector ve=new Vector();
         Vector vf=new Vector();
@@ -483,7 +593,7 @@ class Main {
          System.out.println( v.descargar());
          System.out.println( vri.descargar());
           System.out.println( vrf.descargar());
-           System.out.println( vf.descargar());
+           System.out.println( vf.descargar());*/
         //v.frecuenciaDeDistribucion(ve,vf);
        //  System.out.println( ve.descargar());
         //  System.out.println( vf.descargar());
